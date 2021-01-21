@@ -1,0 +1,22 @@
+env:
+  es6: true
+
+extends:
+  - "eslint:recommended"
+  - "plugin:import/errors"
+  - "plugin:import/warnings"
+  - "plugin:@typescript-eslint/recommended"
+
+parser: "@typescript-eslint/parser"
+
+settings:
+  "import/resolver":
+    typescript:
+      alwaysTryTypes: true
+
+parserOptions:
+  ecmaVersion: 11
+  sourceType: module
+
+ignorePatterns:
+  - dist/

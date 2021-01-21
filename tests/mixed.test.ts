@@ -1,0 +1,27 @@
+import { mixed, string } from "yup";
+import yupToJsonSchema from "../src";
+
+describe("mixed type conversion", () => {
+  test("default", () => {
+    expect(yupToJsonSchema(string())).toStrictEqual({
+      type: "string"
+    });
+  });
+  test("oneOf", () => {
+    expect(yupToJsonSchema(string().oneOf(["A", "B"]))).toStrictEqual({
+      type: "string",
+      enum: ["A", "B"]
+    });
+  });
+  test("notOneOf", () => {
+    expect(yupToJsonSchema(string().notOneOf(["A", "B"]))).toStrictEqual({
+      type: "string",
+      not: { enum: ["A", "B"] }
+    });
+  });
+
+  test("expect error on invalid type", () => {
+    const yupSchema = mixed();
+    expect(() => yupToJsonSchema(yupSchema)).toThrowError("unknown type");
+  });
+});

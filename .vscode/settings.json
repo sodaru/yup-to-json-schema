@@ -1,0 +1,12 @@
+{
+  "todohighlight.keywords": [
+    {
+      "text": "@todo"
+    }
+  ],
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.lintTask.enable": true,
+  "eslint.run": "onSave",
+  "files.eol": "\n"
+}

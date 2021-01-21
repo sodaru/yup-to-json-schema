@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src/",
+    "outDir": "dist",
+    "target": "es5",
+    "lib": ["es6"],
+    "strict": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "allowUmdGlobalAccess": false
+  },
+  "exclude": ["node_modules", "dist", "tests"]
+}
