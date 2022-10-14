@@ -1,6 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var lodash_1 = require("lodash");
+function metaHasDescription(meta) {
+    return typeof meta === 'object' && meta != null && 'description' in meta;
+}
 var mixedConverter = function (mixed, typeMap) {
     var _a, _b;
     var jsonSchema = {};
@@ -17,6 +20,10 @@ var mixedConverter = function (mixed, typeMap) {
             // @ts-expect-error notoneof is assigned to enum
             enum: mixedDescription.notOneOf
         };
+    }
+    var meta = mixedDescription.meta;
+    if (metaHasDescription(meta) && meta.description) {
+        jsonSchema.description = meta.description;
     }
     /* @todo default is not supported yet
     const _default = mixed.getDefault();

@@ -2,6 +2,10 @@ import { JSONSchema7 as Schema } from "json-schema";
 import Converter from "./Converter";
 import { merge } from "lodash";
 
+function metaHasDescription(meta: unknown): meta is {description: string} {
+  return typeof meta === 'object' && meta != null && 'description' in meta
+}
+
 const mixedConverter: Converter = (mixed, typeMap) => {
   let jsonSchema: Schema = {};
   // type
@@ -22,7 +26,12 @@ const mixedConverter: Converter = (mixed, typeMap) => {
     };
   }
 
-  /* @todo default is not supported yet 
+  const meta = mixedDescription.meta
+  if (metaHasDescription(meta) && meta.description) {
+    jsonSchema.description = meta.description
+  }
+
+  /* @todo default is not supported yet
   const _default = mixed.getDefault();
   if (_default) {
     jsonSchema.default = _default;
