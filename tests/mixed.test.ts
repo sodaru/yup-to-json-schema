@@ -19,6 +19,12 @@ describe("mixed type conversion", () => {
       not: { enum: ["A", "B"] }
     });
   });
+  test("description", () => {
+    expect(yupToJsonSchema(string().meta({ description: 'A description here'}))).toStrictEqual({
+      type: "string",
+      description: "A description here",
+    });
+  });
 
   test("expect error on invalid type", () => {
     const yupSchema = mixed();
