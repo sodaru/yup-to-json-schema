@@ -1,7 +1,8 @@
 import { JSONSchema7TypeName } from "json-schema";
 import Converter from "./converters/Converter";
+export declare type JSONSchemaTypeName = JSONSchema7TypeName | "mixed";
 export declare type JsonSchemaType = {
-    type: JSONSchema7TypeName | JSONSchema7TypeName[];
+    type: JSONSchemaTypeName | JSONSchemaTypeName[];
     converter: Converter;
 };
 export declare type Map = Record<string, JsonSchemaType>;

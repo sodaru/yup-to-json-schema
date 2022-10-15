@@ -37,12 +37,17 @@ var yupToJsonSchema = function (yupSchema, types) {
         object: {
             type: "object",
             converter: object_1.default
+        },
+        mixed: {
+            type: "mixed",
+            converter: mixed_1.default
         }
     };
     if (types) {
         _types = lodash_1.merge(_types, types);
     }
     var typeMap = new TypeMap_1.default(_types);
-    return mixed_1.default(yupSchema, typeMap);
+    var baseConverter = typeMap.getConverter("mixed");
+    return baseConverter(yupSchema, typeMap);
 };
 exports.default = yupToJsonSchema;
