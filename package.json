@@ -4,12 +4,16 @@
   "description": "Library to convert Yup to JSON Schema",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "clean": "npx rimraf dist",
-    "test": "npx jest",
     "build:tsc": "npx tsc",
     "build": "npm run clean && npm run build:tsc",
-    "prepack": "npm run build"
+    "pretest": "npm run build",
+    "test": "npx jest",
+    "prepack": "npm run test"
   },
   "repository": {
     "type": "git",
