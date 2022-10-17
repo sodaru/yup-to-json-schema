@@ -5,7 +5,9 @@ var TypeMap = /** @class */ (function () {
         this.map = map;
     }
     TypeMap.prototype.getJsonSchemaType = function (yupType) {
-        if (this.map[yupType]) {
+        // We can't write a type-predicate against a union type of JSONSchema7TypeName
+        // We have to rely on manual type-casting here
+        if (this.map[yupType] && this.map[yupType].type !== "mixed") {
             return this.map[yupType].type;
         }
         throw new Error("unknown type " + yupType);

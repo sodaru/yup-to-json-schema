@@ -1,8 +1,9 @@
 import { JSONSchema7TypeName } from "json-schema";
 import Converter from "./converters/Converter";
 
+export type JSONSchemaTypeName = JSONSchema7TypeName | "mixed";
 export type JsonSchemaType = {
-  type: JSONSchema7TypeName | JSONSchema7TypeName[];
+  type: JSONSchemaTypeName | JSONSchemaTypeName[];
   converter: Converter;
 };
 
@@ -17,8 +18,10 @@ export default class TypeMap {
   getJsonSchemaType(
     yupType: string
   ): JSONSchema7TypeName | JSONSchema7TypeName[] {
-    if (this.map[yupType]) {
-      return this.map[yupType].type;
+    // We can't write a type-predicate against a union type of JSONSchema7TypeName
+    // We have to rely on manual type-casting here
+    if (this.map[yupType] && this.map[yupType].type !== "mixed") {
+      return this.map[yupType].type as JSONSchema7TypeName | JSONSchema7TypeName[];
     }
     throw new Error(`unknown type ${yupType}`);
   }

@@ -35,6 +35,10 @@ const yupToJsonSchema = (yupSchema: AnySchema, types?: Map): JSONSchema7 => {
     object: {
       type: "object",
       converter: objectConverter
+    },
+    mixed: {
+      type: "mixed",
+      converter: mixedConverter
     }
   };
 
@@ -43,8 +47,9 @@ const yupToJsonSchema = (yupSchema: AnySchema, types?: Map): JSONSchema7 => {
   }
 
   const typeMap = new TypeMap(_types);
+  const baseConverter = typeMap.getConverter("mixed");
 
-  return mixedConverter(yupSchema, typeMap);
+  return baseConverter(yupSchema, typeMap);
 };
 
 export default yupToJsonSchema;
