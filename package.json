@@ -13,7 +13,8 @@
     "build": "npm run clean && npm run build:tsc",
     "pretest": "npm run build",
     "test": "npx jest",
-    "prepack": "npm run test"
+    "prepack": "npm run test",
+    "postversion": "git push --follow-tags"
   },
   "repository": {
     "type": "git",
