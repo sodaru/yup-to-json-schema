@@ -3,6 +3,7 @@ import ArraySchema from "yup/lib/array";
 import { AnySchema } from "yup/lib/schema";
 import Converter from "./Converter";
 import mixedConverter from "./mixed";
+import commonMetadata from './commonMetadata'
 
 // @ts-expect-error array is of type ArraySchema
 const arrayConverter: Converter = (array: ArraySchema<AnySchema>, typeMap) => {
@@ -28,6 +29,7 @@ const arrayConverter: Converter = (array: ArraySchema<AnySchema>, typeMap) => {
         break;
     }
   });
+  commonMetadata(array, jsonSchema);
   return jsonSchema;
 };
 

@@ -3,6 +3,7 @@ import ObjectSchema from "yup/lib/object";
 import { AnySchema } from "yup/lib/schema";
 import Converter from "./Converter";
 import mixedConverter from "./mixed";
+import commonMetadata from './commonMetadata'
 
 //@ts-expect-error object is of type ObjectSchema
 const objectConverter: Converter = (
@@ -25,6 +26,8 @@ const objectConverter: Converter = (
   if (Object.keys(required).length > 0) {
     jsonSchema.required = required;
   }
+
+  commonMetadata(object, jsonSchema);
   return jsonSchema;
 };
 
