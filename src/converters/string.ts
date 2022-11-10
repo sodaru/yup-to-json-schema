@@ -33,6 +33,7 @@ const stringConverter: Converter = string => {
         jsonSchema.format = "uri";
         break;
       case "uuid":
+        jsonSchema.format = 'uuid';
         jsonSchema.pattern = uuidRegExPattern;
         break;
     }
