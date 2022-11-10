@@ -2,7 +2,7 @@ import { JSONSchema7 } from "json-schema";
 import Converter from "./Converter";
 
 const uuidRegExPattern =
-  "/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i";
+  "^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$";
 
 const stringConverter: Converter = string => {
   const jsonSchema: JSONSchema7 = {};
@@ -24,7 +24,7 @@ const stringConverter: Converter = string => {
         break;
       case "matches":
         // @ts-expect-error params  type is expected to be right
-        jsonSchema.pattern = test.OPTIONS.params.regex?.toString();
+        jsonSchema.pattern = test.OPTIONS.params.regex?.toString().replace(/^\/(.*)\/[gimusy]*$/, '$1');
         break;
       case "email":
         jsonSchema.format = "email";
