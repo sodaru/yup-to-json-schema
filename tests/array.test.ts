@@ -34,4 +34,12 @@ describe("array type conversion", () => {
       maxItems: 2
     });
   });
+
+  test("array with description and examples", () => {
+    expect(yupToJsonSchema(array().meta({ description: "test", examples: [21, 42, 63, 84] }))).toStrictEqual({
+      type: "array",
+      description: "test",
+      examples: [21, 42, 63, 84]
+    });
+  });
 });

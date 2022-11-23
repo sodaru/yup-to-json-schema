@@ -1,5 +1,6 @@
 import { JSONSchema7 } from "json-schema";
 import Converter from "./Converter";
+import commonMetadata from "./commonMetadata";
 
 const numberConverter: Converter = number => {
   const jsonSchema: JSONSchema7 = {};
@@ -29,6 +30,8 @@ const numberConverter: Converter = number => {
         jsonSchema.multipleOf = 1;
     }
   });
+
+  commonMetadata(number, jsonSchema);
   return jsonSchema;
 };
 

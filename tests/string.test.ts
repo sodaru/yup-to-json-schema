@@ -29,9 +29,9 @@ describe("string type conversion", () => {
   });
 
   test("string with matches", () => {
-    expect(yupToJsonSchema(string().matches(/\d{10}/))).toStrictEqual({
+    expect(yupToJsonSchema(string().matches(/\d{10}/gi))).toStrictEqual({
       type: "string",
-      pattern: "/\\d{10}/"
+      pattern: "\\d{10}"
     });
   });
 
@@ -52,8 +52,39 @@ describe("string type conversion", () => {
   test("string with uuid", () => {
     expect(yupToJsonSchema(string().uuid())).toStrictEqual({
       type: "string",
+      format: "uuid",
       pattern:
-        "/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i"
+        "^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$"
+    });
+  });
+
+  test("string with label", () => {
+    expect(yupToJsonSchema(string().label("Your Mom's Name"))).toStrictEqual({
+      type: "string",
+      description: "Your Mom's Name"
+    });
+  });
+
+  test("string with description & example", () => {
+    expect(yupToJsonSchema(string().meta({ description: "Your Mom's Name", example: "Karen" }))).toStrictEqual({
+      type: "string",
+      description: "Your Mom's Name",
+      examples: ["Karen"]
+    });
+  });
+
+  test("string with label & description (use the later)", () => {
+    expect(yupToJsonSchema(string().label("Mom's Name").meta({ description: "Your Mom's Name" }))).toStrictEqual({
+      type: "string",
+      description: "Your Mom's Name"
+    });
+  });
+
+  test("string with multiple examples", () => {
+    expect(yupToJsonSchema(string().label("Your Mom's Name").meta({ examples: ["Karen", "Karen Annoywood"] }))).toStrictEqual({
+      type: "string",
+      description: "Your Mom's Name",
+      examples: ["Karen", "Karen Annoywood"]
     });
   });
 });

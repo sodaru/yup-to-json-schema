@@ -1,4 +1,4 @@
-import { mixed, string } from "yup";
+import { boolean, mixed, string } from "yup";
 import yupToJsonSchema from "../src";
 
 describe("mixed type conversion", () => {
@@ -29,5 +29,13 @@ describe("mixed type conversion", () => {
   test("expect error on invalid type", () => {
     const yupSchema = mixed();
     expect(() => yupToJsonSchema(yupSchema)).toThrowError("unknown type");
+  });
+
+  test("mixed with description and examples", () => {
+    expect(yupToJsonSchema(boolean().meta({ description: "test", example: true }))).toStrictEqual({
+      type: "boolean",
+      description: "test",
+      examples: [true]
+    });
   });
 });
