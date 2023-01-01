@@ -12,7 +12,7 @@ const commonMetadata = (shape : AnySchema, jsonSchema : JSONSchema7) : JSONSchem
     jsonSchema.examples = shape.spec.meta.examples;
   
   try {
-    if (jsonSchema.type && jsonSchema.type !== 'object') {
+    if (jsonSchema.type) {
       const value = shape.getDefault();
       if (typeof value !== 'undefined') {
         jsonSchema.default = value
