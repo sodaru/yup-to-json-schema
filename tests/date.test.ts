@@ -10,11 +10,18 @@ describe("date type conversion", () => {
   });
 
   test("date with description and examples", () => {
-    expect(yupToJsonSchema(date().meta({ description: "test", examples: ['2022-11-10', '2022-11-11'] }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(
+        date().meta({
+          description: "test",
+          examples: ["2022-11-10", "2022-11-11"]
+        })
+      )
+    ).toStrictEqual({
       type: "string",
       format: "date-time",
       description: "test",
-      examples: ['2022-11-10', '2022-11-11']
+      examples: ["2022-11-10", "2022-11-11"]
     });
   });
 });

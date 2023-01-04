@@ -25,7 +25,9 @@ const stringConverter: Converter = string => {
         break;
       case "matches":
         // @ts-expect-error params  type is expected to be right
-        jsonSchema.pattern = test.OPTIONS.params.regex?.toString().replace(/^\/(.*)\/[gimusy]*$/, '$1');
+        jsonSchema.pattern = test.OPTIONS.params.regex
+          ?.toString()
+          .replace(/^\/(.*)\/[gimusy]*$/, "$1");
         break;
       case "email":
         jsonSchema.format = "email";
@@ -34,7 +36,7 @@ const stringConverter: Converter = string => {
         jsonSchema.format = "uri";
         break;
       case "uuid":
-        jsonSchema.format = 'uuid';
+        jsonSchema.format = "uuid";
         jsonSchema.pattern = uuidRegExPattern;
         break;
     }

@@ -63,7 +63,11 @@ describe("number type conversion", () => {
   });
 
   test("number with description & example", () => {
-    expect(yupToJsonSchema(number().meta({ description: "Your Mom's Age", example: 42 }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(
+        number().meta({ description: "Your Mom's Age", example: 42 })
+      )
+    ).toStrictEqual({
       type: "number",
       description: "Your Mom's Age",
       examples: [42]
@@ -71,14 +75,24 @@ describe("number type conversion", () => {
   });
 
   test("number with label & description (use the later)", () => {
-    expect(yupToJsonSchema(number().label("Mom's Age").meta({ description: "Your Mom's Age" }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(
+        number().label("Mom's Age").meta({ description: "Your Mom's Age" })
+      )
+    ).toStrictEqual({
       type: "number",
       description: "Your Mom's Age"
     });
   });
 
   test("number with multiple examples", () => {
-    expect(yupToJsonSchema(number().label("Your Mom's Age").meta({ examples: [21, 42, 63, 84] }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(
+        number()
+          .label("Your Mom's Age")
+          .meta({ examples: [21, 42, 63, 84] })
+      )
+    ).toStrictEqual({
       type: "number",
       description: "Your Mom's Age",
       examples: [21, 42, 63, 84]

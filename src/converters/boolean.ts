@@ -1,6 +1,6 @@
 import { JSONSchema7 } from "json-schema";
 import Converter from "./Converter";
-import commonMetadata from './commonMetadata'
+import commonMetadata from "./commonMetadata";
 
 const booleanConverter: Converter = boolean => {
   const jsonSchema: JSONSchema7 = {};

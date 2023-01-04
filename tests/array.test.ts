@@ -36,7 +36,11 @@ describe("array type conversion", () => {
   });
 
   test("array with description and examples", () => {
-    expect(yupToJsonSchema(array().meta({ description: "test", examples: [21, 42, 63, 84] }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(
+        array().meta({ description: "test", examples: [21, 42, 63, 84] })
+      )
+    ).toStrictEqual({
       type: "array",
       description: "test",
       examples: [21, 42, 63, 84]

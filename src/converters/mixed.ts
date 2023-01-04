@@ -1,10 +1,10 @@
 import { JSONSchema7 as Schema } from "json-schema";
 import Converter from "./Converter";
 import { merge } from "lodash";
-import commonMetadata from './commonMetadata'
+import commonMetadata from "./commonMetadata";
 
-function metaHasDescription(meta: unknown): meta is {description: string} {
-  return typeof meta === 'object' && meta != null && 'description' in meta
+function metaHasDescription(meta: unknown): meta is { description: string } {
+  return typeof meta === "object" && meta != null && "description" in meta;
 }
 
 const mixedConverter: Converter = (mixed, typeMap) => {
@@ -27,9 +27,9 @@ const mixedConverter: Converter = (mixed, typeMap) => {
     };
   }
 
-  const meta = mixedDescription.meta
+  const meta = mixedDescription.meta;
   if (metaHasDescription(meta) && meta.description) {
-    jsonSchema.description = meta.description
+    jsonSchema.description = meta.description;
   }
 
   /* @todo default is not supported yet

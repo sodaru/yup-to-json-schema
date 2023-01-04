@@ -66,7 +66,11 @@ describe("string type conversion", () => {
   });
 
   test("string with description & example", () => {
-    expect(yupToJsonSchema(string().meta({ description: "Your Mom's Name", example: "Karen" }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(
+        string().meta({ description: "Your Mom's Name", example: "Karen" })
+      )
+    ).toStrictEqual({
       type: "string",
       description: "Your Mom's Name",
       examples: ["Karen"]
@@ -74,14 +78,24 @@ describe("string type conversion", () => {
   });
 
   test("string with label & description (use the later)", () => {
-    expect(yupToJsonSchema(string().label("Mom's Name").meta({ description: "Your Mom's Name" }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(
+        string().label("Mom's Name").meta({ description: "Your Mom's Name" })
+      )
+    ).toStrictEqual({
       type: "string",
       description: "Your Mom's Name"
     });
   });
 
   test("string with multiple examples", () => {
-    expect(yupToJsonSchema(string().label("Your Mom's Name").meta({ examples: ["Karen", "Karen Annoywood"] }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(
+        string()
+          .label("Your Mom's Name")
+          .meta({ examples: ["Karen", "Karen Annoywood"] })
+      )
+    ).toStrictEqual({
       type: "string",
       description: "Your Mom's Name",
       examples: ["Karen", "Karen Annoywood"]
