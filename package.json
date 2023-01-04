@@ -9,8 +9,9 @@
   ],
   "scripts": {
     "clean": "npx rimraf dist",
+    "prettier": "npx prettier -c ./",
     "build:tsc": "npx tsc",
-    "build": "npm run clean && npm run build:tsc",
+    "build": "npm run prettier && npm run clean && npm run build:tsc",
     "pretest": "npm run build",
     "test": "npx jest",
     "prepack": "npm run test",

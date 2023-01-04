@@ -7,7 +7,9 @@ describe("boolean type conversion", () => {
   });
 
   test("boolean with description and examples", () => {
-    expect(yupToJsonSchema(boolean().meta({ description: "test", example: true }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(boolean().meta({ description: "test", example: true }))
+    ).toStrictEqual({
       type: "boolean",
       description: "test",
       examples: [true]

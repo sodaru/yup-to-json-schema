@@ -20,9 +20,11 @@ describe("mixed type conversion", () => {
     });
   });
   test("description", () => {
-    expect(yupToJsonSchema(string().meta({ description: 'A description here'}))).toStrictEqual({
+    expect(
+      yupToJsonSchema(string().meta({ description: "A description here" }))
+    ).toStrictEqual({
       type: "string",
-      description: "A description here",
+      description: "A description here"
     });
   });
 
@@ -32,7 +34,9 @@ describe("mixed type conversion", () => {
   });
 
   test("mixed with description and examples", () => {
-    expect(yupToJsonSchema(boolean().meta({ description: "test", example: true }))).toStrictEqual({
+    expect(
+      yupToJsonSchema(boolean().meta({ description: "test", example: true }))
+    ).toStrictEqual({
       type: "boolean",
       description: "test",
       examples: [true]
