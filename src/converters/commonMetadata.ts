@@ -8,6 +8,9 @@ const commonMetadata = (
   if (shape.spec.label) {
     jsonSchema.description = shape.spec.label;
   }
+  if (shape.spec.default) {
+    jsonSchema.default = shape.spec.default;
+  }
   if (shape.spec.meta?.description) {
     jsonSchema.description = shape.spec.meta.description;
   }
@@ -17,8 +20,8 @@ const commonMetadata = (
   if (shape.spec.meta?.examples) {
     jsonSchema.examples = shape.spec.meta.examples;
   }
-  if (shape.spec.default) {
-    jsonSchema.default = shape.spec.default;
+  if (shape.spec.meta?.jsonSchema) {
+    Object.assign(jsonSchema, shape.spec.meta.jsonSchema);
   }
 
   return jsonSchema;
