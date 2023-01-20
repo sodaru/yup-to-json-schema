@@ -38,12 +38,17 @@ describe("array type conversion", () => {
   test("array with description and examples", () => {
     expect(
       yupToJsonSchema(
-        array().meta({ description: "test", examples: [21, 42, 63, 84] })
+        array().meta({
+          description: "test",
+          examples: [21, 42, 63, 84],
+          jsonSchema: { test: true }
+        })
       )
     ).toStrictEqual({
       type: "array",
       description: "test",
-      examples: [21, 42, 63, 84]
+      examples: [21, 42, 63, 84],
+      test: true
     });
   });
 });

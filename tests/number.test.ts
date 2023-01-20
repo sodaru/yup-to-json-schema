@@ -65,12 +65,17 @@ describe("number type conversion", () => {
   test("number with description & example", () => {
     expect(
       yupToJsonSchema(
-        number().meta({ description: "Your Mom's Age", example: 42 })
+        number().meta({
+          description: "Your Mom's Age",
+          example: 42,
+          jsonSchema: { test: true }
+        })
       )
     ).toStrictEqual({
       type: "number",
       description: "Your Mom's Age",
-      examples: [42]
+      examples: [42],
+      test: true
     });
   });
 

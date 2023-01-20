@@ -44,7 +44,8 @@ describe("object type conversion", () => {
       yupToJsonSchema(
         object({ name: string().required(), age: number() }).meta({
           description: "test user",
-          example: { name: "David", age: 32 }
+          example: { name: "David", age: 32 },
+          jsonSchema: { test: true }
         })
       )
     ).toStrictEqual({
@@ -55,7 +56,8 @@ describe("object type conversion", () => {
         age: { type: "number" }
       },
       description: "test user",
-      examples: [{ name: "David", age: 32 }]
+      examples: [{ name: "David", age: 32 }],
+      test: true
     });
   });
 });

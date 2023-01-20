@@ -68,12 +68,17 @@ describe("string type conversion", () => {
   test("string with description & example", () => {
     expect(
       yupToJsonSchema(
-        string().meta({ description: "Your Mom's Name", example: "Karen" })
+        string().meta({
+          description: "Your Mom's Name",
+          example: "Karen",
+          jsonSchema: { test: true }
+        })
       )
     ).toStrictEqual({
       type: "string",
       description: "Your Mom's Name",
-      examples: ["Karen"]
+      examples: ["Karen"],
+      test: true
     });
   });
 

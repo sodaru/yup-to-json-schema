@@ -35,11 +35,18 @@ describe("mixed type conversion", () => {
 
   test("mixed with description and examples", () => {
     expect(
-      yupToJsonSchema(boolean().meta({ description: "test", example: true }))
+      yupToJsonSchema(
+        boolean().meta({
+          description: "test",
+          example: true,
+          jsonSchema: { test: true }
+        })
+      )
     ).toStrictEqual({
       type: "boolean",
       description: "test",
-      examples: [true]
+      examples: [true],
+      test: true
     });
   });
 });
