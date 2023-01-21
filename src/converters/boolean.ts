@@ -1,10 +1,9 @@
 import { JSONSchema7 } from "json-schema";
-import Converter from "./Converter";
-import commonMetadata from "./commonMetadata";
+import { Converter } from "../TypeMap";
 
-const booleanConverter: Converter = boolean => {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const booleanConverter: Converter = description => {
   const jsonSchema: JSONSchema7 = {};
-  commonMetadata(boolean, jsonSchema);
   return jsonSchema;
 };
 

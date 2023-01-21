@@ -1,9 +1,8 @@
-import { AnySchema } from "yup/lib/schema";
+import { AnySchema } from "yup";
+import { merge } from "lodash";
 import { JSONSchema7 } from "json-schema";
 import TypeMap, { Map } from "./TypeMap";
 import stringConverter from "./converters/string";
-import mixedConverter from "./converters/mixed";
-import { merge } from "lodash";
 import numberConverter from "./converters/number";
 import booleanConverter from "./converters/boolean";
 import dateConverter from "./converters/date";
@@ -35,10 +34,6 @@ const yupToJsonSchema = (yupSchema: AnySchema, types?: Map): JSONSchema7 => {
     object: {
       type: "object",
       converter: objectConverter
-    },
-    mixed: {
-      type: "mixed",
-      converter: mixedConverter
     }
   };
 
@@ -46,10 +41,7 @@ const yupToJsonSchema = (yupSchema: AnySchema, types?: Map): JSONSchema7 => {
     _types = merge(_types, types);
   }
 
-  const typeMap = new TypeMap(_types);
-  const baseConverter = typeMap.getConverter("mixed");
-
-  return baseConverter(yupSchema, typeMap);
+  return new TypeMap(_types).convert(yupSchema);
 };
 
 export default yupToJsonSchema;

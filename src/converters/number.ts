@@ -1,29 +1,25 @@
 import { JSONSchema7 } from "json-schema";
-import Converter from "./Converter";
-import commonMetadata from "./commonMetadata";
+import { Converter } from "../TypeMap";
 
-const numberConverter: Converter = number => {
+const numberConverter: Converter = description => {
   const jsonSchema: JSONSchema7 = {};
-  number.tests.forEach(test => {
-    switch (test.OPTIONS.name) {
+
+  description.tests.forEach(test => {
+    switch (test.name) {
       case "min":
-        if (test.OPTIONS.params?.min !== undefined) {
-          //@ts-expect-error test.OPTIONS.params.min will be present
-          jsonSchema.minimum = test.OPTIONS.params.min;
+        if (test.params?.min !== undefined) {
+          jsonSchema.minimum = Number(test.params.min);
         }
-        if (test.OPTIONS.params?.more !== undefined) {
-          //@ts-expect-error test.OPTIONS.params.more will be present
-          jsonSchema.exclusiveMinimum = test.OPTIONS.params.more;
+        if (test.params?.more !== undefined) {
+          jsonSchema.exclusiveMinimum = Number(test.params.more);
         }
         break;
       case "max":
-        if (test.OPTIONS.params?.max !== undefined) {
-          //@ts-expect-error test.OPTIONS.params.max will be present
-          jsonSchema.maximum = test.OPTIONS.params.max;
+        if (test.params?.max !== undefined) {
+          jsonSchema.maximum = Number(test.params.max);
         }
-        if (test.OPTIONS.params?.less !== undefined) {
-          //@ts-expect-error test.OPTIONS.params.less will be present
-          jsonSchema.exclusiveMaximum = test.OPTIONS.params.less;
+        if (test.params?.less !== undefined) {
+          jsonSchema.exclusiveMaximum = Number(test.params.less);
         }
         break;
       case "integer":
@@ -31,7 +27,6 @@ const numberConverter: Converter = number => {
     }
   });
 
-  commonMetadata(number, jsonSchema);
   return jsonSchema;
 };
 

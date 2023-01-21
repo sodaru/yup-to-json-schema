@@ -1,6 +1,12 @@
 import yupToJsonSchema from "../src";
 import { object, string, number } from "yup";
 
+const schema = object();
+
+console.log(schema.getDefault());
+
+console.log(JSON.stringify(schema.describe(), null, 2));
+
 describe("object type conversion", () => {
   test("simple object conversion", () => {
     expect(yupToJsonSchema(object())).toStrictEqual({

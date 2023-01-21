@@ -1,33 +1,37 @@
 import { JSONSchema7 } from "json-schema";
-import ObjectSchema from "yup/lib/object";
-import { AnySchema } from "yup/lib/schema";
-import Converter from "./Converter";
-import mixedConverter from "./mixed";
-import commonMetadata from "./commonMetadata";
+import { SchemaDescription } from "yup";
+import { Converter } from "../TypeMap";
 
-//@ts-expect-error object is of type ObjectSchema
+type ObjectDescription = SchemaDescription & {
+  fields: { [key: string]: SchemaDescription };
+};
+
+// @ts-expect-error fields is expected type
 const objectConverter: Converter = (
-  object: ObjectSchema<Record<string, AnySchema>>,
+  description: ObjectDescription,
   typeMap
 ) => {
   const jsonSchema: JSONSchema7 = {};
   const properties: Record<string, JSONSchema7> = {};
   const required: string[] = [];
-  Object.keys(object.fields).forEach(fieldName => {
-    const field = object.fields[fieldName];
-    properties[fieldName] = mixedConverter(field, typeMap);
-    if (!field.tests.every(test => test.OPTIONS.name != "required")) {
+
+  Object.keys(description.fields).forEach(fieldName => {
+    const fieldDescription = description.fields[fieldName];
+    const converter = typeMap.getConverter(fieldDescription.type);
+    properties[fieldName] = converter(fieldDescription, typeMap);
+    if (!fieldDescription.optional) {
       required.push(fieldName);
     }
   });
+
   if (Object.keys(properties).length > 0) {
     jsonSchema.properties = properties;
   }
+
   if (Object.keys(required).length > 0) {
     jsonSchema.required = required;
   }
 
-  commonMetadata(object, jsonSchema);
   return jsonSchema;
 };
 

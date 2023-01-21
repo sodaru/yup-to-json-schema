@@ -30,7 +30,7 @@ describe("mixed type conversion", () => {
 
   test("expect error on invalid type", () => {
     const yupSchema = mixed();
-    expect(() => yupToJsonSchema(yupSchema)).toThrowError("unknown type");
+    expect(() => yupToJsonSchema(yupSchema)).toThrowError("Unknown type");
   });
 
   test("mixed with description and examples", () => {

@@ -1,35 +1,39 @@
 import { JSONSchema7 } from "json-schema";
-import ArraySchema from "yup/lib/array";
-import { AnySchema } from "yup/lib/schema";
-import Converter from "./Converter";
-import mixedConverter from "./mixed";
-import commonMetadata from "./commonMetadata";
+import { Converter } from "../TypeMap";
+import { SchemaDescription } from "yup";
 
-// @ts-expect-error array is of type ArraySchema
-const arrayConverter: Converter = (array: ArraySchema<AnySchema>, typeMap) => {
+type ArrayDescription = SchemaDescription & { innerType?: SchemaDescription };
+
+const arrayConverter: Converter = (description: ArrayDescription, typeMap) => {
   const jsonSchema: JSONSchema7 = {};
 
-  if (array.innerType) {
-    jsonSchema.items = mixedConverter(array.innerType, typeMap);
+  if (description.innerType) {
+    const converter = typeMap.getConverter(description.innerType.type);
+    jsonSchema.items = converter(description.innerType, typeMap);
   }
 
-  array.tests.forEach(test => {
-    switch (test.OPTIONS.name) {
+  description.tests.forEach(test => {
+    switch (test.name) {
       case "length":
-        // @ts-expect-error test.OPTIONS.params.length will be present
-        jsonSchema.minItems = jsonSchema.maxItems = test.OPTIONS.params.length;
+        if (test.params?.length !== undefined) {
+          jsonSchema.minItems = jsonSchema.maxItems = Number(
+            test.params.length
+          );
+        }
         break;
       case "min":
-        // @ts-expect-error test.OPTIONS.params.min will be present
-        jsonSchema.minItems = test.OPTIONS.params.min;
+        if (test.params?.min !== undefined) {
+          jsonSchema.minItems = Number(test.params.min);
+        }
         break;
       case "max":
-        // @ts-expect-error test.OPTIONS.params.max will be present
-        jsonSchema.maxItems = test.OPTIONS.params.max;
+        if (test.params?.max !== undefined) {
+          jsonSchema.maxItems = Number(test.params.max);
+        }
         break;
     }
   });
-  commonMetadata(array, jsonSchema);
+
   return jsonSchema;
 };
 
