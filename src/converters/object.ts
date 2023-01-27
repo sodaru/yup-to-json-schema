@@ -1,24 +1,27 @@
 import { JSONSchema7 } from "json-schema";
+import { merge } from "lodash";
 import { SchemaDescription } from "yup";
-import { Converter } from "../TypeMap";
+import { Converter, Converters, Meta } from "../types";
+import commonConverter from "./common"
 
 type ObjectDescription = SchemaDescription & {
   fields: { [key: string]: SchemaDescription };
 };
 
-// @ts-expect-error fields is expected type
+
 const objectConverter: Converter = (
   description: ObjectDescription,
-  typeMap
+  converters
 ) => {
-  const jsonSchema: JSONSchema7 = {};
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
   const properties: Record<string, JSONSchema7> = {};
   const required: string[] = [];
 
   Object.keys(description.fields).forEach(fieldName => {
     const fieldDescription = description.fields[fieldName];
-    const converter = typeMap.getConverter(fieldDescription.type);
-    properties[fieldName] = converter(fieldDescription, typeMap);
+    const converter = converters[fieldDescription.type as keyof Converters];
+    properties[fieldName] = converter(fieldDescription, converters);
     if (!fieldDescription.optional) {
       required.push(fieldName);
     }
@@ -32,7 +35,7 @@ const objectConverter: Converter = (
     jsonSchema.required = required;
   }
 
-  return jsonSchema;
+  return merge(jsonSchema, meta.jsonSchema);
 };
 
 export default objectConverter;

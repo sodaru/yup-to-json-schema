@@ -1,15 +1,21 @@
-import { JSONSchema7 } from "json-schema";
-import { Converter } from "../TypeMap";
+import { merge } from "lodash";
 import { SchemaDescription } from "yup";
+import { Converter, Converters, Meta } from "../types";
+import commonConverter from "./common"
 
 type ArrayDescription = SchemaDescription & { innerType?: SchemaDescription };
 
-const arrayConverter: Converter = (description: ArrayDescription, typeMap) => {
-  const jsonSchema: JSONSchema7 = {};
+const arrayConverter: Converter = (
+  description: ArrayDescription,
+  converters
+) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
+  const { innerType } = description;
 
-  if (description.innerType) {
-    const converter = typeMap.getConverter(description.innerType.type);
-    jsonSchema.items = converter(description.innerType, typeMap);
+  if (innerType) {
+    const converter = converters[innerType.type as keyof Converters];
+    jsonSchema.items = converter(innerType, converters);
   }
 
   description.tests.forEach(test => {
@@ -34,7 +40,7 @@ const arrayConverter: Converter = (description: ArrayDescription, typeMap) => {
     }
   });
 
-  return jsonSchema;
+  return merge(jsonSchema, meta.jsonSchema);
 };
 
 export default arrayConverter;

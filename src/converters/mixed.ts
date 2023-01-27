@@ -1,10 +1,11 @@
-import { JSONSchema7 } from "json-schema";
-import { Converter } from "../TypeMap";
+import { merge } from "lodash";
+import { Converter, Meta } from "../types";
+import commonConverter from "./common"
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const mixedConverter: Converter = description => {
-  const jsonSchema: JSONSchema7 = {};
-  return jsonSchema;
+const mixedConverter: Converter = (description, converters) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
+  return merge(jsonSchema, meta.jsonSchema);
 };
 
 export default mixedConverter;

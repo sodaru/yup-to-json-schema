@@ -1,8 +1,10 @@
-import { JSONSchema7 } from "json-schema";
-import { Converter } from "../TypeMap";
+import { merge } from "lodash";
+import { Converter, Meta } from "../types";
+import commonConverter from "./common"
 
-const numberConverter: Converter = description => {
-  const jsonSchema: JSONSchema7 = {};
+const numberConverter: Converter = (description, converters) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
 
   description.tests.forEach(test => {
     switch (test.name) {
@@ -27,7 +29,7 @@ const numberConverter: Converter = description => {
     }
   });
 
-  return jsonSchema;
+  return merge(jsonSchema, meta.jsonSchema);
 };
 
 export default numberConverter;

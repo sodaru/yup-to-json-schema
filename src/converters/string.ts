@@ -1,11 +1,14 @@
-import { JSONSchema7 } from "json-schema";
-import { Converter } from "../TypeMap";
+import { merge } from "lodash";
+import { Converter, Meta } from "../types";
+import commonConverter from "./common"
 
 const uuidRegExPattern =
   "^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$";
 
-const stringConverter: Converter = description => {
-  const jsonSchema: JSONSchema7 = {};
+const stringConverter: Converter = (description, converters) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {}
+
   description.tests.forEach(test => {
     switch (test.name) {
       case "length":
@@ -44,7 +47,7 @@ const stringConverter: Converter = description => {
     }
   });
 
-  return jsonSchema;
+  return merge(jsonSchema, meta.jsonSchema);
 };
 
 export default stringConverter;

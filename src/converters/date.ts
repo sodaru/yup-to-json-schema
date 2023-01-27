@@ -1,10 +1,14 @@
-import { JSONSchema7 } from "json-schema";
-import { Converter } from "../TypeMap";
+import { merge } from "lodash";
+import { Converter, Meta } from "../types";
+import commonConverter from "./common"
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const dateConverter: Converter = description => {
-  const jsonSchema: JSONSchema7 = { format: "date-time" };
-  return jsonSchema;
+const dateConverter: Converter = (description, converters) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
+
+  jsonSchema.format = "date-time";
+
+  return merge(jsonSchema, meta.jsonSchema);
 };
 
 export default dateConverter;
