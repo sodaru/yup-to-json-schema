@@ -1,13 +1,12 @@
-import { merge } from "lodash";
 import { Converter, Meta } from "../types";
-import commonConverter from "./common"
+import commonConverter from "./common";
 
-const uuidRegExPattern =
+export const uuidRegExPattern =
   "^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$";
 
 const stringConverter: Converter = (description, converters) => {
   const jsonSchema = commonConverter(description, converters);
-  const meta: Meta = description.meta || {}
+  const meta: Meta = description.meta || {};
 
   description.tests.forEach(test => {
     switch (test.name) {
@@ -47,7 +46,7 @@ const stringConverter: Converter = (description, converters) => {
     }
   });
 
-  return merge(jsonSchema, meta.jsonSchema);
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default stringConverter;

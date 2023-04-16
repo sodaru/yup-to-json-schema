@@ -1,18 +1,18 @@
 import { JSONSchema7 } from "json-schema";
-import { merge } from "lodash";
 import { SchemaDescription } from "yup";
 import { Converter, Converters, Meta } from "../types";
-import commonConverter from "./common"
+import commonConverter from "./common";
 
 type ObjectDescription = SchemaDescription & {
   fields: { [key: string]: SchemaDescription };
 };
 
-
+// @ts-expect-error description is known
 const objectConverter: Converter = (
   description: ObjectDescription,
   converters
 ) => {
+  /*   Yup automatically adds an object where each key is undefined as the deafault in its description. So objects automatically get a default :(. The developer should use jsonSchema({ default: undefined }) to remedy this */
   const jsonSchema = commonConverter(description, converters);
   const meta: Meta = description.meta || {};
   const properties: Record<string, JSONSchema7> = {};
@@ -35,7 +35,7 @@ const objectConverter: Converter = (
     jsonSchema.required = required;
   }
 
-  return merge(jsonSchema, meta.jsonSchema);
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default objectConverter;

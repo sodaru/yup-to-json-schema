@@ -1,52 +1,37 @@
-import { boolean, mixed, string } from "yup";
-import yupToJsonSchema from "../src";
+import { mixed } from "yup";
+import { convertSchema } from "../src";
 
-describe("mixed type conversion", () => {
-  test("default", () => {
-    expect(yupToJsonSchema(string())).toStrictEqual({
-      type: "string"
-    });
-  });
-  test("oneOf", () => {
-    expect(yupToJsonSchema(string().oneOf(["A", "B"]))).toStrictEqual({
-      type: "string",
-      enum: ["A", "B"]
-    });
-  });
-  test("notOneOf", () => {
-    expect(yupToJsonSchema(string().notOneOf(["A", "B"]))).toStrictEqual({
-      type: "string",
-      not: { enum: ["A", "B"] }
-    });
-  });
-  test("description", () => {
-    expect(
-      yupToJsonSchema(string().meta({ description: "A description here" }))
-    ).toStrictEqual({
-      type: "string",
-      description: "A description here"
+describe("mixed converter", () => {
+  test("type", () => {
+    expect(convertSchema(mixed())).toStrictEqual({
+      type: []
     });
   });
 
-  test("expect error on invalid type", () => {
-    const yupSchema = mixed();
-    expect(() => yupToJsonSchema(yupSchema)).toThrowError("Unknown type");
+  test("type oneOf", () => {
+    const options = ["string", [], {}, null, new Date(), 1];
+    // @ts-expect-error options are known
+    const schema = mixed().oneOf(options);
+    expect(convertSchema(schema)).toStrictEqual({
+      enum: options,
+      type: ["string", "array", "object", "null", "number"]
+    });
   });
 
-  test("mixed with description and examples", () => {
-    expect(
-      yupToJsonSchema(
-        boolean().meta({
-          description: "test",
-          example: true,
-          jsonSchema: { test: true }
-        })
-      )
-    ).toStrictEqual({
-      type: "boolean",
-      description: "test",
-      examples: [true],
-      test: true
+  test("type default", () => {
+    const schema = mixed().default("string");
+    expect(convertSchema(schema)).toStrictEqual({
+      default: "string",
+      type: ["string"]
+    });
+  });
+
+  test("type oneOf default", () => {
+    const schema = mixed().oneOf([[], 1]).default("string");
+    expect(convertSchema(schema)).toStrictEqual({
+      default: "string",
+      enum: [[], 1],
+      type: ["array", "number", "string"]
     });
   });
 });

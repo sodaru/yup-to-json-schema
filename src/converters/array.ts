@@ -1,7 +1,6 @@
-import { merge } from "lodash";
 import { SchemaDescription } from "yup";
 import { Converter, Converters, Meta } from "../types";
-import commonConverter from "./common"
+import commonConverter from "./common";
 
 type ArrayDescription = SchemaDescription & { innerType?: SchemaDescription };
 
@@ -40,7 +39,7 @@ const arrayConverter: Converter = (
     }
   });
 
-  return merge(jsonSchema, meta.jsonSchema);
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default arrayConverter;

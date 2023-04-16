@@ -1,6 +1,5 @@
-import { merge } from "lodash";
 import { Converter, Meta } from "../types";
-import commonConverter from "./common"
+import commonConverter from "./common";
 
 const numberConverter: Converter = (description, converters) => {
   const jsonSchema = commonConverter(description, converters);
@@ -25,11 +24,18 @@ const numberConverter: Converter = (description, converters) => {
         }
         break;
       case "integer":
-        jsonSchema.multipleOf = 1;
+        if (jsonSchema.type === "number") {
+          jsonSchema.type = "integer";
+        } else {
+          // @ts-expect-error type is known
+          jsonSchema.type = [...jsonSchema.type, "integer"].filter(
+            type => type !== "number"
+          );
+        }
     }
   });
 
-  return merge(jsonSchema, meta.jsonSchema);
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default numberConverter;
