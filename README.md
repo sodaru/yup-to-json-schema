@@ -4,6 +4,14 @@
 
 > [JSON-Schema](https://json-schema.org/) is a schema specification for JSON
 
+> NOTE : Upgraded to support Yup Version 1
+> Version Maping
+> | Yup Major Version | This Library Major Version | Branch in this Library |
+> | ----- | ------ | -----|
+> | 1 | 2 | main |
+> | 0 | 1 | yup_v0 |
+
+
 This library converts `Yup` schema to `JSON-Schema`
 
 ## Installation
