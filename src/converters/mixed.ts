@@ -1,50 +1,56 @@
-import { JSONSchema7 as Schema } from "json-schema";
-import Converter from "./Converter";
-import { merge } from "lodash";
-import commonMetadata from "./commonMetadata";
+import { JSONSchema7TypeName } from "json-schema";
+import { Converter, Meta } from "../types";
+import commonConverter from "./common";
 
-function metaHasDescription(meta: unknown): meta is { description: string } {
-  return typeof meta === "object" && meta != null && "description" in meta;
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getType = (item: any): JSONSchema7TypeName => {
+  switch (typeof item) {
+    case "string":
+      return "string";
+    case "number":
+      return "number";
+    case "boolean":
+      return "boolean";
+    case "object":
+      if (Array.isArray(item)) {
+        return "array";
+      } else if (item === null) {
+        return "null";
+      } else if (item instanceof Date) {
+        return "string";
+      } else {
+        return "object";
+      }
+    default:
+      return "null";
+  }
+};
 
-const mixedConverter: Converter = (mixed, typeMap) => {
-  let jsonSchema: Schema = {};
-  // type
-  const yupType = mixed.type;
-  jsonSchema.type = typeMap.getJsonSchemaType(yupType);
+const mixedConverter: Converter = (description, converters) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
 
-  const mixedDescription = mixed.describe();
+  let types = Array.isArray(description.type)
+    ? description.type
+    : [description.type];
 
-  if (mixedDescription.oneOf?.length > 0) {
-    // @ts-expect-error oneof is assigned to enum
-    jsonSchema.enum = mixedDescription.oneOf;
+  types = types.filter(type => type !== "mixed");
+
+  if (description.oneOf?.length > 0) {
+    description.oneOf.forEach(item => {
+      types.push(getType(item));
+    });
   }
 
-  if (mixedDescription.notOneOf?.length > 0) {
-    jsonSchema.not = {
-      // @ts-expect-error notoneof is assigned to enum
-      enum: mixedDescription.notOneOf
-    };
+  if (description.default !== undefined) {
+    types.push(getType(description.default));
   }
 
-  const meta = mixedDescription.meta;
-  if (metaHasDescription(meta) && meta.description) {
-    jsonSchema.description = meta.description;
-  }
+  types = types.filter((type, index, self) => self.indexOf(type) === index);
 
-  /* @todo default is not supported yet
-  const _default = mixed.getDefault();
-  if (_default) {
-    jsonSchema.default = _default;
-  }
-   */
+  jsonSchema.type = (types as unknown) as JSONSchema7TypeName;
 
-  const converter = typeMap.getConverter(yupType);
-  const typeSpecificSchema = converter(mixed, typeMap);
-
-  jsonSchema = merge(jsonSchema, typeSpecificSchema);
-  commonMetadata(mixed, jsonSchema);
-  return jsonSchema;
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default mixedConverter;

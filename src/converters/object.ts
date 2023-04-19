@@ -1,34 +1,41 @@
 import { JSONSchema7 } from "json-schema";
-import ObjectSchema from "yup/lib/object";
-import { AnySchema } from "yup/lib/schema";
-import Converter from "./Converter";
-import mixedConverter from "./mixed";
-import commonMetadata from "./commonMetadata";
+import { SchemaDescription } from "yup";
+import { Converter, Converters, Meta } from "../types";
+import commonConverter from "./common";
 
-//@ts-expect-error object is of type ObjectSchema
+type ObjectDescription = SchemaDescription & {
+  fields: { [key: string]: SchemaDescription };
+};
+
+// @ts-expect-error description is known
 const objectConverter: Converter = (
-  object: ObjectSchema<Record<string, AnySchema>>,
-  typeMap
+  description: ObjectDescription,
+  converters
 ) => {
-  const jsonSchema: JSONSchema7 = {};
+  /*   Yup automatically adds an object where each key is undefined as the deafault in its description. So objects automatically get a default :(. The developer should use jsonSchema({ default: undefined }) to remedy this */
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
   const properties: Record<string, JSONSchema7> = {};
   const required: string[] = [];
-  Object.keys(object.fields).forEach(fieldName => {
-    const field = object.fields[fieldName];
-    properties[fieldName] = mixedConverter(field, typeMap);
-    if (!field.tests.every(test => test.OPTIONS.name != "required")) {
+
+  Object.keys(description.fields).forEach(fieldName => {
+    const fieldDescription = description.fields[fieldName];
+    const converter = converters[fieldDescription.type as keyof Converters];
+    properties[fieldName] = converter(fieldDescription, converters);
+    if (!fieldDescription.optional) {
       required.push(fieldName);
     }
   });
+
   if (Object.keys(properties).length > 0) {
     jsonSchema.properties = properties;
   }
+
   if (Object.keys(required).length > 0) {
     jsonSchema.required = required;
   }
 
-  commonMetadata(object, jsonSchema);
-  return jsonSchema;
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default objectConverter;

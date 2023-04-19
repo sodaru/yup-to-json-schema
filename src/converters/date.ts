@@ -1,12 +1,14 @@
-import { JSONSchema7 } from "json-schema";
-import Converter from "./Converter";
-import commonMetadata from "./commonMetadata";
+import { Converter, Meta } from "../types";
+import commonConverter from "./common";
 
-const dateConverter: Converter = date => {
-  const jsonSchema: JSONSchema7 = { format: "date-time" };
+const dateConverter: Converter = (description, converters) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
 
-  commonMetadata(date, jsonSchema);
-  return jsonSchema;
+  jsonSchema.type = "string";
+  jsonSchema.format = "date-time";
+
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default dateConverter;

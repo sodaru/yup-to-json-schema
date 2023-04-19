@@ -1,33 +1,37 @@
-import { JSONSchema7 } from "json-schema";
-import Converter from "./Converter";
-import commonMetadata from "./commonMetadata";
+import { Converter, Meta } from "../types";
+import commonConverter from "./common";
 
-const uuidRegExPattern =
+export const uuidRegExPattern =
   "^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$";
 
-const stringConverter: Converter = string => {
-  const jsonSchema: JSONSchema7 = {};
-  string.tests.forEach(test => {
-    switch (test.OPTIONS.name) {
+const stringConverter: Converter = (description, converters) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
+
+  description.tests.forEach(test => {
+    switch (test.name) {
       case "length":
-        // @ts-expect-error params  type is expected to be right
-        jsonSchema.minLength = test.OPTIONS.params.length;
-        // @ts-expect-error params  type is expected to be right
-        jsonSchema.maxLength = test.OPTIONS.params.length;
+        if (test.params?.length !== undefined) {
+          jsonSchema.minLength = Number(test.params.length);
+          jsonSchema.maxLength = Number(test.params.length);
+        }
         break;
       case "min":
-        // @ts-expect-error params  type is expected to be right
-        jsonSchema.minLength = test.OPTIONS.params.min;
+        if (test.params?.min !== undefined) {
+          jsonSchema.minLength = Number(test.params.min);
+        }
         break;
       case "max":
-        // @ts-expect-error params  type is expected to be right
-        jsonSchema.maxLength = test.OPTIONS.params.max;
+        if (test.params?.max !== undefined) {
+          jsonSchema.maxLength = Number(test.params.max);
+        }
         break;
       case "matches":
-        // @ts-expect-error params  type is expected to be right
-        jsonSchema.pattern = test.OPTIONS.params.regex
-          ?.toString()
-          .replace(/^\/(.*)\/[gimusy]*$/, "$1");
+        if (test.params?.regex) {
+          jsonSchema.pattern = (test.params.regex as RegExp)
+            .toString()
+            .replace(/^\/(.*)\/[gimusy]*$/, "$1");
+        }
         break;
       case "email":
         jsonSchema.format = "email";
@@ -42,8 +46,7 @@ const stringConverter: Converter = string => {
     }
   });
 
-  commonMetadata(string, jsonSchema);
-  return jsonSchema;
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default stringConverter;
