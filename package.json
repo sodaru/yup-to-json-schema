@@ -1,6 +1,6 @@
 {
   "name": "@sodaru/yup-to-json-schema",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Library to convert Yup to JSON Schema",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
