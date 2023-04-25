@@ -11,7 +11,6 @@
 > | 1 | 2 | main |
 > | 0 | 1 | yup_v0 |
 
-
 This library converts `Yup` schema to `JSON-Schema`
 
 ## Installation
@@ -22,9 +21,11 @@ npm i @sodaru/yup-to-json-schema
 
 ## Usage
 
+### Convert YUP to JSON-SCHEMA
+
 ```js
 import { object, string, array, tuple, date, boolean, number } from 'yup';
-import { convertSchema } from 'yup-json-schema';
+import { convertSchema } from '@sodaru/yup-to-json-schema';
 
 const schema = object({
   name: string().label('Name').required(),
@@ -37,7 +38,7 @@ const schema = object({
 
 const jsonSchema = convertSchema(schema);
 
-jsonSchema = {
+assert(jsonSchema).toEqual({
   type: 'object',
   required: ['name']
   properties: {
@@ -82,8 +83,10 @@ jsonSchema = {
       exclusiveMinimum: 0
     }
   }
-};
+});
 ```
+
+### Provide additional Schema as meta property in Yup
 
 Add additional JSON Schema information to the `jsonSchema` property via the `meta()` method. This will be shallow merged with the result of the conversion.
 
@@ -95,6 +98,8 @@ const schema = object({ ... }).meta({
   }
 });
 ```
+
+### extend the schema
 
 You can also use the `extendSchema` to add helpful methods to all of your yup schemas. Use the `example`, `examples`, `description`, and `jsonSchema` methods to add common proprties to your JSON Schemas.
 
@@ -110,7 +115,7 @@ import {
   addMethod,
   Schema
 } from 'yup';
-import { extendSchema, convertSchema } from 'yup-json-schema';
+import { extendSchema, convertSchema } from '@sodaru/yup-to-json-schema';
 
 extendSchema({ addMethod, Schema });
 
@@ -214,33 +219,35 @@ jsonSchema = {
 };
 ```
 
+### Provide the data using the ResolveOptions for `when` and `lazy`
+
 Use the second argument `ResolveOptions` to pass context to allow for better `when` and `lazy` methods. This argument is passed to the underlying `describe(options)`
 
 ```js
-import { object, number } from 'yup';
-import { convertSchema } from 'yup-json-schema';
+import { object, number } from "yup";
+import { convertSchema } from "@sodaru/yup-to-json-schema";
 
 const schema = object({
-  rank: number().when(['name'], ([name], schema) => {
-    return name === 'Johnny Cash' ? schema.min(100) : schema.min(0);
+  rank: number().when(["name"], ([name], schema) => {
+    return name === "Johnny Cash" ? schema.min(100) : schema.min(0);
   })
 });
 
 const schema = object({
   rank: lazy(({ name }) => {
-    return name === 'Johnny Cash' ? number().min(100) : number().min(0);
+    return name === "Johnny Cash" ? number().min(100) : number().min(0);
   })
 });
 
 const jsonSchema = convertSchema(schema, {
-  value: { name: 'Johnny Cash', rank: 100 }
+  value: { name: "Johnny Cash", rank: 100 }
 });
 
 jsonSchema = {
-  type: 'object',
+  type: "object",
   properties: {
     rank: {
-      type: 'number',
+      type: "number",
       minimum: 100
     }
   }
