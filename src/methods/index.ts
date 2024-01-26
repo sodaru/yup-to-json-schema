@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 
-import { AnySchema } from "yup";
-import { JsonSchemaCallback, Meta } from "../types";
+import type { AnySchema } from "yup";
+import type { JsonSchemaCallback, Meta } from "../types.js";
 
 type YupParams = {
   addMethod: any;

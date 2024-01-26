@@ -1,7 +1,7 @@
-import { JSONSchema7 } from "json-schema";
-import { SchemaDescription } from "yup";
-import { Converter, Converters, Meta } from "../types";
-import commonConverter from "./common";
+import type { JSONSchema7 } from "json-schema";
+import type { SchemaDescription } from "yup";
+import type { Converter, Converters, Meta } from "../types.js";
+import commonConverter from "./common.js";
 
 type ObjectDescription = SchemaDescription & {
   fields: { [key: string]: SchemaDescription };

@@ -1,6 +1,6 @@
-import { SchemaDescription } from "yup";
-import { Converter, Converters, Meta } from "../types";
-import commonConverter from "./common";
+import type { SchemaDescription } from "yup";
+import type { Converter, Converters, Meta } from "../types.js";
+import commonConverter from "./common.js";
 
 type ArrayDescription = SchemaDescription & { innerType?: SchemaDescription };
 

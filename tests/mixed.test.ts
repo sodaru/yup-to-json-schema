@@ -1,5 +1,6 @@
 import { mixed } from "yup";
 import { convertSchema } from "../src";
+import { describe, test, expect } from "vitest";
 
 describe("mixed converter", () => {
   test("type", () => {

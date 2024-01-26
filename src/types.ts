@@ -1,5 +1,5 @@
-import { JSONSchema7 } from "json-schema";
-import { SchemaDescription } from "yup";
+import type { JSONSchema7 } from "json-schema";
+import type { SchemaDescription } from "yup";
 
 export type YupType =
   | "array"
@@ -27,10 +27,13 @@ export type Meta = {
 
 /* This is basically Yup's ResolveOptions type that yup doesn't actually export with `converters` added. */
 export type ResolveOptions = {
-  value?: unknown;
-  parent?: unknown;
-  context?: unknown;
-  converters?: Converters;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  value?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  parent?: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  context?: any;
+  converters?: Partial<Converters>;
 };
 
 export type JsonSchemaCallback = (jsonSchema: JSONSchema7) => JSONSchema7;

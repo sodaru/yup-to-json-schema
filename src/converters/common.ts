@@ -1,5 +1,9 @@
-import { JSONSchema7, JSONSchema7Type, JSONSchema7TypeName } from "json-schema";
-import { Converter } from "../types";
+import type {
+  JSONSchema7,
+  JSONSchema7Type,
+  JSONSchema7TypeName
+} from "json-schema";
+import type { Converter } from "../types.js";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const commonConverter: Converter = (description, converters) => {

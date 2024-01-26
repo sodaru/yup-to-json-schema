@@ -1,5 +1,6 @@
 import { tuple, string, array } from "yup";
 import { convertSchema } from "../src";
+import { describe, test, expect } from "vitest";
 
 describe("tuple converter", () => {
   test("type", () => {

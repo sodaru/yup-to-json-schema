@@ -1,5 +1,6 @@
 import { array, lazy, string } from "yup";
-import { convertSchema } from "../src";
+import { convertSchema } from "../src/index.js";
+import { describe, test, expect } from "vitest";
 
 describe("date converter", () => {
   test("type", () => {

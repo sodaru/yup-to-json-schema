@@ -1,5 +1,6 @@
 import { string, array, object, date, boolean, number } from "yup";
 import { convertSchema } from "../src";
+import { describe, test, expect } from "vitest";
 
 const schema = string();
 

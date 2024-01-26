@@ -1,5 +1,6 @@
 import { date } from "yup";
 import { convertSchema } from "../src";
+import { describe, test, expect } from "vitest";
 
 describe("date converter", () => {
   test("type", () => {

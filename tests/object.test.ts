@@ -1,5 +1,6 @@
 import { object, string, array, boolean, date, number } from "yup";
 import { convertSchema } from "../src";
+import { describe, test, expect } from "vitest";
 
 describe("object converter", () => {
   test("type", () => {

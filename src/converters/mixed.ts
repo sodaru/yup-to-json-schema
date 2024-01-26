@@ -1,6 +1,6 @@
-import { JSONSchema7TypeName } from "json-schema";
-import { Converter, Meta } from "../types";
-import commonConverter from "./common";
+import type { JSONSchema7TypeName } from "json-schema";
+import type { Converter, Meta } from "../types.js";
+import commonConverter from "./common.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const getType = (item: any): JSONSchema7TypeName => {
@@ -48,7 +48,7 @@ const mixedConverter: Converter = (description, converters) => {
 
   types = types.filter((type, index, self) => self.indexOf(type) === index);
 
-  jsonSchema.type = (types as unknown) as JSONSchema7TypeName;
+  jsonSchema.type = types as unknown as JSONSchema7TypeName;
 
   return Object.assign(jsonSchema, meta.jsonSchema);
 };

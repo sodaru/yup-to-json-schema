@@ -1,5 +1,6 @@
 import { number } from "yup";
 import { convertSchema } from "../src";
+import { describe, test, expect } from "vitest";
 
 describe("number converter", () => {
   test("type", () => {

@@ -1,5 +1,6 @@
 import { addMethod, Schema, string } from "yup";
 import { extendSchema, convertSchema } from "../src";
+import { describe, test, expect } from "vitest";
 
 describe("extends methods", () => {
   extendSchema({ addMethod, Schema });

@@ -1,2 +1,2 @@
-export { convertSchema } from "./converters";
-export { extendSchema } from "./methods";
+export { convertSchema } from "./converters/index.js";
+export { extendSchema } from "./methods/index.js";

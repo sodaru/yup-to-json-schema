@@ -1,5 +1,6 @@
 import { array, string } from "yup";
 import { convertSchema } from "../src";
+import { describe, test, expect } from "vitest";
 
 describe("array converter", () => {
   test("type", () => {

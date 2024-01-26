@@ -1,6 +1,7 @@
 import { string } from "yup";
 import { convertSchema } from "../src";
 import { uuidRegExPattern } from "../src/converters/string";
+import { describe, test, expect } from "vitest";
 
 describe("string converter", () => {
   test("type", () => {
