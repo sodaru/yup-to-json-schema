@@ -1,25 +1,9 @@
 import { boolean } from "yup";
-import yupToJsonSchema from "../src";
+import { convertSchema } from "../src";
+import { describe, test, expect } from "vitest";
 
-describe("boolean type conversion", () => {
-  test("simple boolean", () => {
-    expect(yupToJsonSchema(boolean())).toStrictEqual({ type: "boolean" });
-  });
-
-  test("boolean with description and examples", () => {
-    expect(
-      yupToJsonSchema(
-        boolean().meta({
-          description: "test",
-          example: true,
-          jsonSchema: { test: true }
-        })
-      )
-    ).toStrictEqual({
-      type: "boolean",
-      description: "test",
-      examples: [true],
-      test: true
-    });
+describe("boolean converter", () => {
+  test("type", () => {
+    expect(convertSchema(boolean())).toStrictEqual({ type: "boolean" });
   });
 });

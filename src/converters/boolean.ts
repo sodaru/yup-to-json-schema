@@ -1,11 +1,10 @@
-import { JSONSchema7 } from "json-schema";
-import Converter from "./Converter";
-import commonMetadata from "./commonMetadata";
+import type { Converter, Meta } from "../types.js";
+import commonConverter from "./common.js";
 
-const booleanConverter: Converter = boolean => {
-  const jsonSchema: JSONSchema7 = {};
-  commonMetadata(boolean, jsonSchema);
-  return jsonSchema;
+const booleanConverter: Converter = (description, converters) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default booleanConverter;

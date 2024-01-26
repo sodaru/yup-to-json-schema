@@ -1,38 +1,41 @@
-import { JSONSchema7 } from "json-schema";
-import Converter from "./Converter";
-import commonMetadata from "./commonMetadata";
+import type { Converter, Meta } from "../types.js";
+import commonConverter from "./common.js";
 
-const numberConverter: Converter = number => {
-  const jsonSchema: JSONSchema7 = {};
-  number.tests.forEach(test => {
-    switch (test.OPTIONS.name) {
+const numberConverter: Converter = (description, converters) => {
+  const jsonSchema = commonConverter(description, converters);
+  const meta: Meta = description.meta || {};
+
+  description.tests.forEach(test => {
+    switch (test.name) {
       case "min":
-        if (test.OPTIONS.params?.min !== undefined) {
-          //@ts-expect-error test.OPTIONS.params.min will be present
-          jsonSchema.minimum = test.OPTIONS.params.min;
+        if (test.params?.min !== undefined) {
+          jsonSchema.minimum = Number(test.params.min);
         }
-        if (test.OPTIONS.params?.more !== undefined) {
-          //@ts-expect-error test.OPTIONS.params.more will be present
-          jsonSchema.exclusiveMinimum = test.OPTIONS.params.more;
+        if (test.params?.more !== undefined) {
+          jsonSchema.exclusiveMinimum = Number(test.params.more);
         }
         break;
       case "max":
-        if (test.OPTIONS.params?.max !== undefined) {
-          //@ts-expect-error test.OPTIONS.params.max will be present
-          jsonSchema.maximum = test.OPTIONS.params.max;
+        if (test.params?.max !== undefined) {
+          jsonSchema.maximum = Number(test.params.max);
         }
-        if (test.OPTIONS.params?.less !== undefined) {
-          //@ts-expect-error test.OPTIONS.params.less will be present
-          jsonSchema.exclusiveMaximum = test.OPTIONS.params.less;
+        if (test.params?.less !== undefined) {
+          jsonSchema.exclusiveMaximum = Number(test.params.less);
         }
         break;
       case "integer":
-        jsonSchema.multipleOf = 1;
+        if (jsonSchema.type === "number") {
+          jsonSchema.type = "integer";
+        } else {
+          // @ts-expect-error type is known
+          jsonSchema.type = [...jsonSchema.type, "integer"].filter(
+            type => type !== "number"
+          );
+        }
     }
   });
 
-  commonMetadata(number, jsonSchema);
-  return jsonSchema;
+  return Object.assign(jsonSchema, meta.jsonSchema);
 };
 
 export default numberConverter;

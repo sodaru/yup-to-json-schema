@@ -1,9 +1,7 @@
 {
   "recommendations": [
-    "CoenraadS.bracket-pair-colorizer-2",
     "esbenp.prettier-vscode",
     "wayou.vscode-todo-highlight",
-    "dbaeumer.vscode-eslint",
-    "firsttris.vscode-jest-runner"
+    "dbaeumer.vscode-eslint"
   ]
 }
